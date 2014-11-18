@@ -84,6 +84,11 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\Pin\Message\GetRecipientRequest', $parameters);
     }
 
+    public function ListRecipientTransfers(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Pin\Message\ListRecipientTransfersRequest', $parameters);
+    }
+
     public function getCharge(array $parameters = array())
     {
         return $this->createRequest('\Omnipay\Pin\Message\GetChargeRequest', $parameters);
