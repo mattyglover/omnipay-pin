@@ -7,26 +7,42 @@ namespace Omnipay\Pin\Message;
  */
 class CreateCustomerRequest extends AbstractRequest
 {
-    protected $liveEndpoint = 'https://api.pin.net.au/1';
-    protected $testEndpoint = 'https://test-api.pin.net.au/1';
 
-    public function getSecretKey()
+    public function getEmail()
     {
-        return $this->getParameter('secretKey');
+        return $this->getParameter('email');
     }
 
-    public function setSecretKey($value)
+    public function setEmail($value)
     {
-        return $this->setParameter('secretKey', $value);
+        return $this->setParameter('email', $value);
+    }
+
+    public function getCardToken()
+    {
+        return $this->getParameter('card_token');
+    }
+
+    public function setCardToken($value)
+    {
+        return $this->setParameter('card_token', $value);
+    }
+
+    public function getToken() {
+        return $this->getCardToken();
+    }
+
+    public function setToken($value) {
+        return $this->setCardToken($value);
     }
 
     public function getData()
     {
         $data = array();
-        $data['email'] = $this->getCard()->getEmail();
+        $data['email'] = $this->getEmail();
 
-        if ($this->getToken()) {
-            $data['card_token'] = $this->getToken();
+        if ($token = $this->getToken()) {
+            $data['card_token'] = $token;
         } else {
             $this->getCard()->validate();
 
@@ -46,10 +62,12 @@ class CreateCustomerRequest extends AbstractRequest
         return $data;
     }
 
-    public function sendData($data)
-    {
+
+    public function sendData($data) {
+
         $httpResponse = $this->sendRequest('/customers', $data);
 
         return $this->response = new Response($this, $httpResponse->json());
     }
+
 }
