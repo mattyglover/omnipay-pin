@@ -63,7 +63,7 @@ class CreateCustomerRequest extends AbstractRequest
 
     public function sendData($data) {
 
-        $httpResponse = $this->sendRequest('post','/customers', $data);
+        $httpResponse = $this->sendRequest(self::METHOD_POST,'/customers', $data);
 
         return $this->response = new Response($this, $httpResponse->json());
     }

@@ -9,6 +9,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
     const METHOD_POST = 'post';
     const METHOD_GET = 'get';
+    const METHOD_PUT = 'put';
 
     public function getSecretKey()
     {
@@ -25,7 +26,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
 
-    public function sendRequest($method = self::METHOD_GET,$action, $data = null)
+    public function sendRequest($method = self::METHOD_GET, $action, $data = null)
     {
         // don't throw exceptions for 4xx errors
         $this->httpClient->getEventDispatcher()->addListener(
@@ -39,6 +40,10 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
 
         if ($method == self::METHOD_GET) {
             $httpResponse = $this->httpClient->get($this->getEndpoint() . $action, null, $data)
+                ->setHeader('Authorization', 'Basic ' . base64_encode($this->getSecretKey() . ':'));
+        }
+        elseif ($method == self::METHOD_PUT) {
+            $httpResponse = $this->httpClient->put($this->getEndpoint() . $action, null, $data)
                 ->setHeader('Authorization', 'Basic ' . base64_encode($this->getSecretKey() . ':'));
         }
         else {
