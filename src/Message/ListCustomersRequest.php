@@ -2,8 +2,6 @@
 
 namespace Omnipay\Pin\Message;
 
-use Omnipay\Common\Message\AbstractRequest;
-
 /**
  * List Customers Request
  */
