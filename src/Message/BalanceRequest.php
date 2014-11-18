@@ -7,6 +7,7 @@ use Omnipay\Common\Message\AbstractRequest;
 /**
  * Pin Balance Request
  */
+
 class BalanceRequest extends AbstractRequest
 {
     protected $liveEndpoint = 'https://api.pin.net.au/1';
