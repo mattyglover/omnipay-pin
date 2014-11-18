@@ -22,7 +22,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
 
-    public function sendRequest($action, $data = null)
+    public function sendRequest($method = 'get',$action, $data = null)
     {
         // don't throw exceptions for 4xx errors
         $this->httpClient->getEventDispatcher()->addListener(
@@ -34,8 +34,14 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             }
         );
 
-        $httpResponse = $this->httpClient->post($this->getEndpoint() . $action, null, $data)
-            ->setHeader('Authorization', 'Basic ' . base64_encode($this->getSecretKey() . ':'));
+        if ($method=='get') {
+            $httpResponse = $this->httpClient->get($this->getEndpoint() . $action, null, $data)
+                ->setHeader('Authorization', 'Basic ' . base64_encode($this->getSecretKey() . ':'));
+        }
+        else {
+            $httpResponse = $this->httpClient->post($this->getEndpoint() . $action, null, $data)
+                ->setHeader('Authorization', 'Basic ' . base64_encode($this->getSecretKey() . ':'));
+        }
 
         return $httpResponse->send();
     }
