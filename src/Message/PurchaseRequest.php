@@ -7,37 +7,55 @@ namespace Omnipay\Pin\Message;
  */
 class PurchaseRequest extends AbstractRequest
 {
-    protected $liveEndpoint = 'https://api.pin.net.au/1';
-    protected $testEndpoint = 'https://test-api.pin.net.au/1';
 
-    public function getSecretKey()
+    public function getEmail()
     {
-        return $this->getParameter('secretKey');
+        return $this->getParameter('email');
     }
 
-    public function setSecretKey($value)
+    public function setEmail($value)
     {
-        return $this->setParameter('secretKey', $value);
+        return $this->setParameter('email', $value);
+    }
+
+    public function getCardToken()
+    {
+        return $this->getParameter('card_token');
+    }
+
+    public function setCardToken($value)
+    {
+        return $this->setParameter('card_token', $value);
+    }
+
+    public function getCustomerToken() {
+        return $this->getParameter('customer_token');
+    }
+
+    public function setCustomerToken($value) {
+        return $this->setParameter('customer_token', $value);
     }
 
     public function getData()
     {
-        $this->validate('amount', 'card');
+//        $this->validate('amount', 'card');
 
         $data = array();
+
+
         $data['amount'] = $this->getAmountInteger();
         $data['currency'] = strtolower($this->getCurrency());
         $data['description'] = $this->getDescription();
         $data['ip_address'] = $this->getClientIp();
-        $data['email'] = $this->getCard()->getEmail();
+        $data['email'] = $this->getEmail();
 
-        if ($token = $this->getToken()) {
-            if (strpos($token, 'card_') !== false) {
-                $data['card_token'] = $token;
-            } else {
+        if ($token = $this->getCustomerToken()) {
                 $data['customer_token'] = $token;
-            }
-        } else {
+        }
+        elseif ($token = $this->getCardToken()) {
+            $data['card_token'] = $token;
+        }
+        else {
             $this->getCard()->validate();
 
             $data['card']['number'] = $this->getCard()->getNumber();
@@ -58,8 +76,9 @@ class PurchaseRequest extends AbstractRequest
 
     public function sendData($data)
     {
-        $httpResponse = $this->sendRequest('/charges', $data);
+        $httpResponse = $this->sendRequest(self::METHOD_POST, '/charges', $data);
 
         return $this->response = new Response($this, $httpResponse->json());
     }
+
 }
