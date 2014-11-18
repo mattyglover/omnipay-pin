@@ -5,7 +5,7 @@ namespace Omnipay\Pin;
 use Omnipay\Common\AbstractGateway;
 
 /**
- * Pin Gateway
+ * Pin Gateway mg
  *
  * @link https://pin.net.au/docs/api
  */
