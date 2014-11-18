@@ -7,6 +7,9 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
     protected $liveEndpoint = 'https://api.pin.net.au/1';
     protected $testEndpoint = 'https://test-api.pin.net.au/1';
 
+    const METHOD_POST = 'post';
+    const METHOD_GET = 'get';
+
     public function getSecretKey()
     {
         return $this->getParameter('secretKey');
@@ -22,7 +25,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
 
-    public function sendRequest($method = 'get',$action, $data = null)
+    public function sendRequest($method = self::METHOD_GET,$action, $data = null)
     {
         // don't throw exceptions for 4xx errors
         $this->httpClient->getEventDispatcher()->addListener(
@@ -34,7 +37,7 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
             }
         );
 
-        if ($method=='get') {
+        if ($method == self::METHOD_GET) {
             $httpResponse = $this->httpClient->get($this->getEndpoint() . $action, null, $data)
                 ->setHeader('Authorization', 'Basic ' . base64_encode($this->getSecretKey() . ':'));
         }

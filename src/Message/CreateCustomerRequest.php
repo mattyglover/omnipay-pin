@@ -44,8 +44,6 @@ class CreateCustomerRequest extends AbstractRequest
         if ($token = $this->getToken()) {
             $data['card_token'] = $token;
         } else {
-            $this->getCard()->validate();
-
             $data['card']['number'] = $this->getCard()->getNumber();
             $data['card']['expiry_month'] = $this->getCard()->getExpiryMonth();
             $data['card']['expiry_year'] = $this->getCard()->getExpiryYear();
