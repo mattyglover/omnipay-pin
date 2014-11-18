@@ -28,7 +28,7 @@ class GetCustomerRequest extends AbstractRequest
     public function getData()
     {
         $data = array();
-        $data['token'] = $this->getToken();
+        $data['customer_token'] = $this->getToken();
         return $data;
     }
 

@@ -70,4 +70,10 @@ class Gateway extends AbstractGateway
         return $this->createRequest('\Omnipay\Pin\Message\GetCustomerRequest', $parameters);
     }
 
+    public function getCharge(array $parameters = array())
+    {
+        return $this->createRequest('\Omnipay\Pin\Message\GetChargeRequest', $parameters);
+    }
+
+
 }
